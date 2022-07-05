@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Microapp</title>
+  </head>
+
+  <body>
+    <div id="app">haha</div>
+
+    <script id="worker" type="app/worker">
+        self.addEventListener('message', function () {
+            self.postMessage('some message');
+        }, false);
+    </script>
+    <!-- 上面是一段嵌入网页的脚本，注意必须指定<script>标签的type属性是一个浏览器不认识的值，上例是app/worker -->
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
