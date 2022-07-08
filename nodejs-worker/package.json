@@ -1,0 +1,18 @@
+{
+  "name": "nodejs-worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "app1": "node part1/app.js",
+    "message-channel": "node part2-message-channel/message-channel.js",
+    "app3": "node part3-setTimeout/app.js",
+    "app4": "node part4-work-pool/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}

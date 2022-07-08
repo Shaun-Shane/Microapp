@@ -1,3 +1,8 @@
+if (window.Worker) {
+    console.log(window.Worker)
+    // ... your code
+}
+
 const worker = new Worker('js/work.js')
 
 // 主线程调用worker.postMessage()方法，向 Worker 发消息。
