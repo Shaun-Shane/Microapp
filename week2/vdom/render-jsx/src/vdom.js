@@ -1,3 +1,12 @@
+const createElement = (type, props, ...children) => {
+  if (props === null) props = {}
+  return {
+    type,
+    props,
+    children
+  }
+}
+
 function isElementVdom(vdom) {
   return typeof vdom == 'object' && typeof vdom.type == 'string';
 }
@@ -31,3 +40,11 @@ const render = (vdom, parent = null) => {
     }
   }
 }
+
+const jsx = <ul className="list">
+  <li className="item" style={{ background: 'blue', color: 'pink' }} onClick={() => alert(2)}>aaa</li>
+  <li className="item">bbbb</li>
+  <li className="item">cccc</li>
+</ul>
+
+render(jsx, document.getElementById('app'))
