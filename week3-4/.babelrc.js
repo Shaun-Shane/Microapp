@@ -5,7 +5,7 @@ module.exports = {
             {
                 pragma: 'createElement'
             },
-            '@babel/preset-env'
+            'es2015',
         ]
     ]
 }

@@ -1,4 +1,4 @@
-import {
+const {
   ReactDOM,
   Component,
   useReducer,
@@ -6,7 +6,7 @@ import {
   useEffect,
   useLayoutEffect,
   createElement
-} from "../../mini-react";
+} = require("../../mini-react/index");
 
 function FunctionComponent(props) {
   const [count, setCount] = useReducer((x) => x + 1, 0);
