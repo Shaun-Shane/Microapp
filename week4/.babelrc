@@ -1,0 +1,11 @@
+{
+    "presets": [
+      [
+        "@babel/preset-react",
+        {
+          // 这样写，babel会调用 createElement函数 来递归生成 jsx对象
+          "pragma": "createElement"
+        }
+      ]
+    ]
+}
