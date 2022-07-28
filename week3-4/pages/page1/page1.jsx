@@ -1,98 +1,58 @@
-import {
-  ReactDOM,
-  Component,
-  useReducer,
-  useState,
-  useEffect,
-  useLayoutEffect,
-  createElement
-} from "../../mini-react/index";
-
-function FunctionComponent(props) {
-  const [count, setCount] = useReducer((x) => x + 1, 0);
-  const [count2, setCount2] = useState(0);
-
-  useEffect(() => {
-    console.log("omg useEffect", count2); //sy-log
-  }, [count2]);
-
-  useLayoutEffect(() => {
-    console.log("omg useLayoutEffect", count2); //sy-log
-  }, [count2]);
-
-  return (
-    <div className="border">
-      <p>{props.name}</p>
-      <button onClick={() => setCount()}>{count}</button>
-      <button
-        onClick={() => {
-          setCount2(count2 + 1);
-        }}
-      >
-        {count2}
-      </button>
-
-      {count % 2 ? <div>omg</div> : <span>123</span>}
-
-      <ul>
-        {/* {count2 === 2
-          ? [0, 1, 3, 4].map((item) => {
-              return <li key={item}>{item}</li>;
-            })
-          : [0, 1, 2, 3, 4].map((item) => {
-              return <li key={item}>{item}</li>;
-            })} */}
-
-        {count2 === 2
-          ? [2, 1, 3, 4].map((item) => {
-              return <li key={item}>{item}</li>;
-            })
-          : [0, 1, 2, 3, 4].map((item) => {
-              return <li key={item}>{item}</li>;
-            })}
-      </ul>
-    </div>
-  );
+function Item(props) {
+  return <li className="item" style={props.style}>{props.children}  <a href="#" onClick={props.onRemoveItem}>X </a></li>;
 }
 
-class ClassComponent extends Component {
+class List extends Component {
+  constructor(props) {
+      super();
+      this.state = {
+          list: [
+              {
+                  text: 'aaa',
+                  color: 'pink'
+              },
+              {
+                  text: 'bbb',
+                  color: 'orange'
+              },
+              {
+                  text: 'ccc',
+                  color: 'yellow'
+              }
+          ]
+      }
+  }
+
+  handleItemRemove(index) {
+      this.setState({
+          list: this.state.list.filter((item, i) => i !== index)
+      });
+  }
+  
+  handleAdd() {
+      this.setState({
+          list: [
+              ...this.state.list, 
+              {
+                  text: this.ref.value
+              }
+          ]
+      });
+  }
+
   render() {
-    return (
-      <div className="border">
-        <h3>{this.props.name}</h3>
-        我是文本
-      </div>
-    );
+      return <div>
+          <ul className="list">
+              {this.state.list.map((item, index) => {
+                  return <Item style={{ background: item.color, color: this.state.textColor}} onRemoveItem={() => this.handleItemRemove(index)}>{item.text}</Item>
+              })}
+          </ul>
+          <div>
+              <input ref={(ele) => {this.ref = ele}}/>
+              <button onClick={this.handleAdd.bind(this)}>add</button>
+          </div>
+      </div>;
   }
 }
 
-function FragmentComponent() {
-  return (
-    <ul>
-      <>
-        <li>part1</li>
-        <li>part2</li>
-      </>
-    </ul>
-  );
-}
-
-const jsx = (
-  <div className="border">
-    <h1>react</h1>
-    <a href="https://github.com/bubucuo/mini-react">mini react</a>
-    <FunctionComponent name="函数组件" />
-    <ClassComponent name="类组件" />
-    <FragmentComponent />
-  </div>
-);
-
-ReactDOM.createRoot(document.getElementById("root")).render(jsx);
-
-// 实现了常见组件初次渲染
-
-// 原生标签
-// 函数组件
-// 类组件
-// 文本
-// Fragment
+render(<List textColor={'#000'}/>, document.getElementById('root'));
