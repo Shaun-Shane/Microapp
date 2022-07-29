@@ -1,10 +1,10 @@
-import { render, createElement, useState } from "./mini-react/mini-react"
+import { render, createElement, useState, Component } from "./mini-react/mini-react"
 
-function App(props) {
+function App (props) {
     return <h1>Hi {props.name}</h1>
 }
 
-function Counter() {
+function Counter () {
     const [state, setState] = useState(1)
     return (
         <div>
@@ -16,6 +16,17 @@ function Counter() {
     )
 }
 
+class List extends Component {
+    render() {
+        return (
+          <div className="border">
+            <h3>{this.props.name}</h3>
+            我是文本
+          </div>
+        );
+    }
+}
+
 const profile = (
     <div className="profile">
         <span className="profile-title">title</span>
@@ -23,6 +34,7 @@ const profile = (
         this is ...
         <App name="foo"/>
         <Counter />
+        <List textColor={'pink'}/>
     </div>
 )
 

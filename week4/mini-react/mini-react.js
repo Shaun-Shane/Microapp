@@ -98,14 +98,6 @@ function reconcileChildren (wipFiber, elements) {
     }
 }
 
-// 处理普通组件
-function updateHostComponent (fiber) {
-    if (!fiber.dom) {
-        fiber.dom = createDom(fiber)
-    }
-    reconcileChildren(fiber, fiber.props.children)
-}
-
 let wipFiber = null
 let hookIndex = null
 
@@ -141,8 +133,16 @@ function useState (initial) {
     return [hook.state, setState]
 }
 
-// 处理函数组件
-function updateFunctionComponent (fiber) {
+// 处理普通组件
+function updateHostComponent (fiber) {
+    if (!fiber.dom) {
+        fiber.dom = createDom(fiber)
+    }
+    reconcileChildren(fiber, fiber.props.children)
+}
+
+// 处理函数
+function updateFunction (fiber) {
     wipFiber = fiber
     hookIndex = 0
     wipFiber.hooks = []
@@ -151,15 +151,31 @@ function updateFunctionComponent (fiber) {
     reconcileChildren(fiber, children)
 }
 
+// 处理 class
+function updateComponent (fiber) {
+    // 执行 class，返回jsx
+    const instance = new fiber.type(fiber.props)
+
+    const children = [instance.render()]
+
+    reconcileChildren(fiber, children)
+}
+
+
 // 每次执行完一个单元任务（做了以下3件事），会返回下一个单元任务
 // 1. 给fiber添加dom，并插入父元素
 // 2. 给当前fiber的每一个子元素生成fiber节点
 // 3. 找到要返回的下一个 unitOfWork
 function performUnitOfWork (fiber) {
     const isFuncitonComponent = fiber.type instanceof Function
+    const isComponent = Component.isPrototypeOf(fiber.type)
 
     if (isFuncitonComponent) {
-        updateFunctionComponent(fiber)
+        if (isComponent) { // class
+            updateComponent(fiber)
+        } else { // function
+            updateFunction(fiber)
+        }
     } else {
         updateHostComponent(fiber)
     }
@@ -316,4 +332,15 @@ function updateDom (dom, prevProps, nextProps) {
     })
 }
 
-export { render, createElement, useState }
+class Component {
+    constructor (props) {
+        this.props = props || {};
+        this.state = null;
+    }
+
+    setState (nextState) {
+        this.state = nextState;
+    }
+}
+
+export { render, createElement, useState, Component }
