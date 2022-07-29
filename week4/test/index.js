@@ -1,4 +1,4 @@
-import { render, createElement, useState, Component } from "./mini-react/mini-react"
+import { render, createElement, useState, Component } from "../mini-react/mini-react.js"
 
 function App (props) {
     return <h1>Hi {props.name}</h1>
@@ -11,7 +11,7 @@ function Counter () {
             <button onClick={() => setState(c => c + 1)}>
                 点击 + 1
             </button>
-            <p>Count: {state}</p>
+            <p r-if={state > 3}>Count: {state}</p>
         </div>
     )
 }
