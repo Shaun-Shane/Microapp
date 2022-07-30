@@ -170,6 +170,8 @@ function performUnitOfWork (fiber) {
     const isFunctionComponent = fiber.type instanceof Function
     const isComponent = Component.isPrototypeOf(fiber.type)
 
+    console.log(fiber)
+
     if (isFunctionComponent) {
         if (isComponent) { // class
             updateComponent(fiber)
@@ -306,15 +308,20 @@ function updateDom (dom, prevProps, nextProps) {
     .filter(isProperty)
     .filter(isGone(prevProps, nextProps))
     .forEach(name => {
-        dom[name] = ""
+        if (name === 'style') {
+            Object.assign(dom.style, {})
+        } else dom[name] = ""
     })
 
+    console.log(dom, prevProps, nextProps)
      // 3. 设置新的属性
     Object.keys(nextProps)
     .filter(isProperty)
     .filter(isNew(prevProps, nextProps))
     .forEach(name => {
-        dom[name] = nextProps[name]
+        if (name === 'style') {
+            Object.assign(dom.style, nextProps[name]);
+        } else dom[name] = nextProps[name]
     })
 
     // 设置新的 dom 事件监听函数

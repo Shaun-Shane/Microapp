@@ -44,8 +44,10 @@ class List extends Component {
       className: "list"
     }, this.state.list.map((item, index) => {
       return createElement(Item, {
-        backgroundColor: item.color,
-        color: this.state.textColor,
+        style: {
+          background: item.color,
+          color: this.state.textColor
+        },
         onClick: () => alert(item.text)
       }, item.text);
     }));
