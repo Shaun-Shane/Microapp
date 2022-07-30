@@ -13,11 +13,42 @@ function Counter() {
   }, "\u70B9\u51FB + 1"), state > 3 ? createElement("p", null, "Count: ", state) : null);
 }
 
+function Item(props) {
+  return createElement("li", {
+    className: "item",
+    style: props.style,
+    onClick: props.onClick
+  }, props.children);
+}
+
 class List extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      list: [{
+        text: 'aaa',
+        color: 'blue'
+      }, {
+        text: 'bbb',
+        color: 'orange'
+      }, {
+        text: 'ccc',
+        color: 'red'
+      }],
+      textColor: props.textColor
+    };
+  }
+
   render() {
-    return createElement("div", {
-      className: "border"
-    }, createElement("h3", null, this.props.name), "\u6211\u662F\u6587\u672C");
+    return createElement("ul", {
+      className: "list"
+    }, this.state.list.map((item, index) => {
+      return createElement(Item, {
+        backgroundColor: item.color,
+        color: this.state.textColor,
+        onClick: () => alert(item.text)
+      }, item.text);
+    }));
   }
 
 }
