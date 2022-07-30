@@ -4,6 +4,8 @@ function App (props) {
     return <h1>Hi {props.name}</h1>
 }
 
+const arr = ['1', '2', '3']
+
 function Counter () {
     const [state, setState] = useState(1)
     return (
@@ -11,7 +13,9 @@ function Counter () {
             <button onClick={() => setState(c => c + 1)}>
                 点击 + 1
             </button>
-            <p r-if={state > 3}>Count: {state}</p>
+            <p r-if={state > 3}>
+                Count: {state}
+            </p>
         </div>
     )
 }
@@ -35,6 +39,9 @@ const profile = (
         <App name="foo"/>
         <Counter />
         <List textColor={'pink'}/>
+        <p r-for={(item, index) in arr} key={index}>
+            {item}
+        </p>
     </div>
 )
 

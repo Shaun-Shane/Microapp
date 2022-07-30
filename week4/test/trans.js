@@ -4,6 +4,8 @@ function App(props) {
   return createElement("h1", null, "Hi ", props.name);
 }
 
+const arr = ['1', '2', '3'];
+
 function Counter() {
   const [state, setState] = useState(1);
   return createElement("div", null, createElement("button", {
@@ -30,6 +32,8 @@ const profile = createElement("div", {
   name: "foo"
 }), createElement(Counter, null), createElement(List, {
   textColor: 'pink'
-}));
+}), arr.map((item, index) => createElement('p', {
+  key: index
+}, item)));
 const container = document.getElementById("root");
 render(profile, container);

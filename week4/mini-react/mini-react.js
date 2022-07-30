@@ -138,7 +138,7 @@ function updateHostComponent (fiber) {
     if (!fiber.dom) {
         fiber.dom = createDom(fiber)
     }
-    reconcileChildren(fiber, fiber.props.children)
+    reconcileChildren(fiber, [].concat(...fiber.props.children))
 }
 
 // 处理函数
@@ -167,10 +167,10 @@ function updateComponent (fiber) {
 // 2. 给当前fiber的每一个子元素生成fiber节点
 // 3. 找到要返回的下一个 unitOfWork
 function performUnitOfWork (fiber) {
-    const isFuncitonComponent = fiber.type instanceof Function
+    const isFunctionComponent = fiber.type instanceof Function
     const isComponent = Component.isPrototypeOf(fiber.type)
 
-    if (isFuncitonComponent) {
+    if (isFunctionComponent) {
         if (isComponent) { // class
             updateComponent(fiber)
         } else { // function
