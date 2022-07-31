@@ -1,4 +1,4 @@
-import { render, createElement, useState, Component } from "../mini-react/mini-react.js"
+import { createElement, useState, Component } from '../mini-react/mini-react.js'
 
 function App (props) {
     return <h1>Hi {props.name}</h1>
@@ -26,7 +26,7 @@ function Item(props) {
 
 class List extends Component {
     constructor (props) {
-        super();
+        super ();
         this.state = {
             list: [
                 {
@@ -46,7 +46,7 @@ class List extends Component {
         }
     }
 
-    render() {
+    render () {
         return <ul className="list">
             {this.state.list.map((item, index) => {
                 return <Item
@@ -59,19 +59,20 @@ class List extends Component {
     }
 }
 
-const profile = (
-    <div className="profile">
-        <span className="profile-title">title</span>
-        <h3 className="profile-content">content</h3>
-        this is ...
-        <App name="foo"/>
-        <Counter />
-        <List textColor={'pink'}/>
-        <p r-for={(item, index) in arr} key={index}>
-            {item}
-        </p>
-    </div>
-)
-
-const container = document.getElementById("root")
-render(profile, container)
+export default class Index extends Component {
+    render () {
+        return (
+            <div className="profile">
+                <span className="profile-title">title</span>
+                <h3 className="profile-content">content</h3>
+                this is ...
+                <App name="foo"/>
+                <Counter />
+                <List textColor={'pink'}/>
+                <p r-for={(item, index) in arr} key={index}>
+                    {item}
+                </p>
+            </div>
+        )
+    }
+}

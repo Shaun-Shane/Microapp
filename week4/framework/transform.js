@@ -1,5 +1,4 @@
 import babel from '@babel/core';
-import fs from 'fs'
 
 function transformIf (t, path) {
     let { node } = path // path.node 可获取到该节点的AST
@@ -90,10 +89,9 @@ function transformFor (t, path) {
     // createElement('${element}', {key: ${mapItem.split(',')[1]}}, {mapItem.split(',')[0])
 }
 
-try {
-    const code= fs.readFileSync('test/index.js', 'utf8')
-    console.log('transforming...')
-    const output = babel.transformSync(code, {
+
+export default function babelTransformSync (code) {
+    return babel.transformSync(code, {
         "presets": [
             [
               "@babel/preset-react",
@@ -116,8 +114,4 @@ try {
             }
         ]
     })
-    fs.writeFileSync('test/trans.js', output.code)
-    console.log('success!')
-} catch (err) {
-    console.log(err)
 }

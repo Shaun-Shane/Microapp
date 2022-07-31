@@ -170,8 +170,6 @@ function performUnitOfWork (fiber) {
     const isFunctionComponent = fiber.type instanceof Function
     const isComponent = Component.isPrototypeOf(fiber.type)
 
-    console.log(fiber)
-
     if (isFunctionComponent) {
         if (isComponent) { // class
             updateComponent(fiber)
@@ -313,7 +311,6 @@ function updateDom (dom, prevProps, nextProps) {
         } else dom[name] = ""
     })
 
-    console.log(dom, prevProps, nextProps)
      // 3. 设置新的属性
     Object.keys(nextProps)
     .filter(isProperty)

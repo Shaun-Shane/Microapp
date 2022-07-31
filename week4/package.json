@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "transform": "node transform.js",
-    "start": "parcel test/index.html",
+    "start": "node framework/index.js",
+    "startparcel": "parcel test/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
