@@ -1,5 +1,6 @@
 import babelTransformSync from './transform.js'
 import fs from 'fs'
+import liveServer from 'live-server'
 
 function pageCode (page) {
     page = page.split('.')[0]
@@ -19,6 +20,8 @@ try {
 
     fs.writeFileSync('framework/gen.js', pageCode('index.js'))
     console.log('gen success!')
+
+    liveServer.start()
 } catch (err) {
     console.log(err)
 }
