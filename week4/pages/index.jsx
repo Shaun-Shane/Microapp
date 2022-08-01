@@ -20,7 +20,7 @@ function Counter () {
     )
 }
 
-function Item(props) {
+function Item (props) {
     return <li className="item" style={props.style} onClick={props.onClick}>{props.children}</li>;
 }
 
@@ -60,10 +60,23 @@ class List extends Component {
 }
 
 export default class Index extends Component {
+    methods = {
+        calc1 () {
+            let tmp = 1
+            for (let i = 0; i < 1000; i++) ++tmp
+            alert(tmp)
+        },
+        calc2 () {
+            let tmp = 1
+            for (let i = 0; i < 1000; i++) ++tmp
+            return tmp
+        }
+    }
+
     render () {
         return (
             <div className="profile">
-                <span className="profile-title">title</span>
+                <span className="profile-title" onClick={this.methods.calc1}>title</span>
                 <h3 className="profile-content">content</h3>
                 this is ...
                 <App name="foo"/>
@@ -72,6 +85,8 @@ export default class Index extends Component {
                 <p r-for={(item, index) in arr} key={index}>
                     {item}
                 </p>
+                <p r-if={true}> v-if-true: {this.methods.calc2()} </p>
+                <p r-if={false}> v-if-false: {this.methods.calc2()}</p>
             </div>
         )
     }
