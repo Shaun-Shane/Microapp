@@ -7,7 +7,24 @@ function pageCode (page) {
     return `import { render } from './mini-react/mini-react.js'\n`
     + `import ${page[0].toUpperCase() + page.substr(1)} from './dist/${page}.js'\n\n`
     + `const container = document.getElementById('root')\n`
-    + `render(new ${page[0].toUpperCase() + page.substr(1)}().render(), container)\n`
+    + `const view = new ${page[0].toUpperCase() + page.substr(1)}()\n`
+    + `render(view.render(), container)\n`
+}
+
+function insertScriptToHtml () {
+    // insert <script> into html
+    const html = fs.readFileSync('index.html', 'utf-8')
+    const pos = html.indexOf('</body>') + 7
+    const resultHtml = html.substr(0, pos)
+                    + '\n  <script type="module" src="./master.js"></script>'
+                    + html.substr(pos)
+    fs.writeFileSync('framework/index.html', resultHtml)
+}
+
+function loadPage (page) { // page can be index page1 page2...
+    // load js
+    fs.writeFileSync('framework/master.js', pageCode(`${page.toLowerCase()}.js`))
+    console.log('load success!')
 }
 
 try {
@@ -18,10 +35,12 @@ try {
     fs.writeFileSync('framework/dist/index.js', trans.code)
     console.log('success!')
 
-    fs.writeFileSync('framework/gen.js', pageCode('index.js'))
-    console.log('gen success!')
+    insertScriptToHtml()
+    loadPage('index')
 
-    liveServer.start()
+    liveServer.start({
+        root: 'framework'
+    })
 } catch (err) {
     console.log(err)
 }
