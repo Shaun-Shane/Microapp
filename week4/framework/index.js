@@ -4,26 +4,26 @@ import liveServer from 'live-server'
 
 function pageCode (page) {
     page = page.split('.')[0]
-    return `import { render } from './mini-react/mini-react.js'\n`
-    + `import ${page[0].toUpperCase() + page.substr(1)} from './dist/${page}.js'\n\n`
+    return `import { render } from '../mini-react/mini-react.js'\n`
+    + `import { invoke } from '../invoke.js'\n`
+    + `import ${page[0].toUpperCase() + page.substr(1)} from './pages/${page}.js'\n\n`
     + `const container = document.getElementById('root')\n`
     + `const view = new ${page[0].toUpperCase() + page.substr(1)}()\n`
     + `render(view.render(), container)\n`
 }
 
 function insertScriptToHtml () {
-    // insert <script> into html
     const html = fs.readFileSync('index.html', 'utf-8')
     const pos = html.indexOf('</body>') + 7
     const resultHtml = html.substr(0, pos)
-                    + '\n  <script type="module" src="./master.js"></script>'
+                    + '\n  <script type="module" src="./dist/master.js"></script>'
                     + html.substr(pos)
     fs.writeFileSync('framework/index.html', resultHtml)
 }
 
 function loadPage (page) { // page can be index page1 page2...
     // load js
-    fs.writeFileSync('framework/master.js', pageCode(`${page.toLowerCase()}.js`))
+    fs.writeFileSync('framework/dist/master.js', pageCode(`${page.toLowerCase()}.js`))
     console.log('load success!')
 }
 
@@ -32,10 +32,12 @@ try {
     const jsx = fs.readFileSync('pages/index.jsx', 'utf8')
     console.log('transforming...')
     const trans = babelTransformSync(jsx)
-    fs.writeFileSync('framework/dist/index.js', trans.code)
+    fs.writeFileSync('framework/dist/pages/index.js', trans.code)
     console.log('success!')
 
+    // insert <script> into html
     insertScriptToHtml()
+    // load pages/index
     loadPage('index')
 
     liveServer.start({
