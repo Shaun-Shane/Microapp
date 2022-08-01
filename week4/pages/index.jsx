@@ -66,8 +66,7 @@ export default class Index extends Component {
             for (let i = 0; i < 1000; i++) ++tmp
             alert(tmp)
         },
-        calc2 () {
-            let tmp = 1
+        calc2 (tmp) {
             for (let i = 0; i < 1000; i++) ++tmp
             return tmp
         }
@@ -85,8 +84,8 @@ export default class Index extends Component {
                 <p r-for={(item, index) in arr} key={index}>
                     {item}
                 </p>
-                <p r-if={true}> v-if-true: {this.methods.calc2()} </p>
-                <p r-if={false}> v-if-false: {this.methods.calc2()}</p>
+                <p r-if={true}> v-if-true: {this.methods.calc2(3)} </p>
+                <p r-if={false}> v-if-false: {this.methods.calc2(3)}</p>
             </div>
         )
     }
