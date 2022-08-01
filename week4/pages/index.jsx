@@ -1,4 +1,4 @@
-import { createElement, useState, Component } from '../mini-react/mini-react.js'
+import { createElement, useState, Component } from '../../mini-react/mini-react.js'
 
 function App (props) {
     return <h1>Hi {props.name}</h1>
@@ -66,8 +66,9 @@ export default class Index extends Component {
             for (let i = 0; i < 1000; i++) ++tmp
             alert(tmp)
         },
-        calc2 (tmp) {
+        calc2 (tmp, tmp2) {
             for (let i = 0; i < 1000; i++) ++tmp
+            tmp += tmp2
             return tmp
         }
     }
@@ -84,8 +85,8 @@ export default class Index extends Component {
                 <p r-for={(item, index) in arr} key={index}>
                     {item}
                 </p>
-                <p r-if={true}> v-if-true: {this.methods.calc2(3)} </p>
-                <p r-if={false}> v-if-false: {this.methods.calc2(3)}</p>
+                <p r-if={true}> v-if-true: {this.methods.calc2(3, 101)} </p>
+                <p r-if={false}> v-if-false: {this.methods.calc2(3, 101)}</p>
             </div>
         )
     }
