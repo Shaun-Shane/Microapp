@@ -60,7 +60,7 @@ class List extends Component {
 }
 
 export default class Index extends Component {
-    methods = {
+    methods    = {
         calc1 () {
             let tmp = 1
             for (let i = 0; i < 1000; i++) ++tmp
@@ -70,6 +70,7 @@ export default class Index extends Component {
             for (let i = 0; i < 1000; i++) ++tmp
             tmp += tmp2
             return tmp
+            // return await invoke(calc2.toString(), [tmp, tmp2])
         }
     }
 
