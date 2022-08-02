@@ -5,6 +5,10 @@ export function invoke (func = '', params = []) {
     const promise = new Promise((resolve, reject) => {
       worker.onmessage = (e) => {
         if (!e.data) resolve(e.data)
+        else if (e.data.type === 'alert') {
+          resolve()
+          alert(e.data.text)
+        }
         else resolve(JSON.parse(e.data))
       }
       worker.onerror = (e) => {

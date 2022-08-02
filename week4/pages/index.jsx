@@ -66,6 +66,7 @@ export default class Index extends Component {
             let tmp = 1;
             for (let i = 0; i < 10000000000; i++) ++tmp;
             console.log('calc1: ', tmp);
+            alert('calc1 result' + tmp)
         },
         calc2 (tmp, tmp2) {
             console.log('calc2 running...')

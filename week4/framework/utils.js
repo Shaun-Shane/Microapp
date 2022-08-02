@@ -44,25 +44,23 @@ export function loadPage (page) { // page can be index page1 page2...
 // 替换 methods 相关代码
 // calc2(tmp, tmp2) { return await invoke(calc2.toString(), [tmp, tmp2]) }
 function replaceMethodsStr(code, range) {
-    const str = code.substr(range.start, range.end - range.start + 1)
+    let str = code.substr(range.start, range.end - range.start + 1)
+    const prevLength = str.length
 
-    console.log(str)
 
     const name = '\nasync' + str.substr(0, str.indexOf('{'))
     const params = getParameterName(str)
-
     const body = `{ return await invoke(\`${str}\`, [${params.map(e => e).join(', ')}]) }`
-    
+
     const AsyncFunc = Object.getPrototypeOf(async function() {}).constructor
     let newStr = (new AsyncFunc(...[].concat(params), body)).toString()
 
     newStr = name + newStr.substr(newStr.indexOf('{'))
-
     code = code.substr(0, range.start) + newStr + code.substr(range.end + 1)
 
     return {
         code: code,
-        delta: newStr.length - str.length
+        delta: newStr.length - prevLength
     }
 }
 
