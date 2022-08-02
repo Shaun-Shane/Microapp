@@ -1,7 +1,7 @@
 import { createElement, useState, Component } from '../../mini-react/mini-react.js'
 
 function App (props) {
-    return <h1>Hi {props.name}</h1>
+    return <h1>Hi {props.name}，这是一个函数组件</h1>
 }
 
 const arr = ['1', '2', '3']
@@ -11,7 +11,7 @@ function Counter () {
     return (
         <div>
             <button onClick={() => setState(c => c + 1)}>
-                点击 + 1
+                点击 + 1, setState, 大于 3 显示结果
             </button>
             <p r-if={state > 3}>
                 Count: {state}
@@ -30,7 +30,7 @@ class List extends Component {
         this.state = {
             list: [
                 {
-                    text: 'aaa',
+                    text: 'aaa, click to alert',
                     color: 'blue'
                 },
                 {
@@ -65,21 +65,21 @@ export default class Index extends Component {
             console.log('calc1 running...')
             let tmp = 1;
             for (let i = 0; i < 10000000000; i++) ++tmp;
-            console.log(tmp);
+            console.log('calc1: ', tmp);
         },
         calc2 (tmp, tmp2) {
-            for (let i = 0; i < 1000; i++) ++tmp
+            console.log('calc2 running...')
+            for (let i = 0; i < 10000000000; i++) ++tmp
             tmp += tmp2
-            return tmp
-            // return await invoke(calc2.toString(), [tmp, tmp2])
+            console.log('calc2:', tmp)
         }
     }
 
     render () {
         return (
             <div className="profile">
-                <span className="profile-title" onClick={this.methods.calc1}>title</span>
-                <h3 className="profile-content">content</h3>
+                <span className="profile-title" onClick={this.methods.calc1}>这是一个 span, 点击进行 10000000000 次循环</span>
+                <h3 className="profile-content">这是一个 h3</h3>
                 this is ...
                 <App name="foo"/>
                 <Counter />
@@ -87,8 +87,8 @@ export default class Index extends Component {
                 <p r-for={(item, index) in arr} key={index}>
                     {item}
                 </p>
-                <p r-if={true}> v-if-true: {123/*this.methods.calc2(3, 101)*/} </p>
-                <p r-if={false}> v-if-false: {123/*this.methods.calc2(3, 101)*/}</p>
+                <p r-if={true}> v-if-true: {this.methods.calc2(3, 101)} </p>
+                <p r-if={false}> v-if-false: {this.methods.calc2(3, 101)}</p>
             </div>
         )
     }

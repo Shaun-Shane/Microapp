@@ -1,3 +1,9 @@
+function isPromise (obj) {
+    return !!obj  //有实际含义的变量才执行方法，变量null，undefined和''空串都为false
+        && (typeof obj === 'object' || typeof obj === 'function') // 初始promise 或 promise.then返回的
+        && typeof obj.then === 'function';
+}
+
 function createTextElement (text) {
     return {
         type: 'TEXT_ELEMENT',
@@ -13,9 +19,12 @@ function createElement (type, props, ...children) {
         type,
         props: {
             ...props,
-            children: children.map(child =>
-                typeof child === 'object' ? child : createTextElement(child)
-            )
+            children: children.map((child) => {
+                if (isPromise(child)) {
+                    return createTextElement(child)
+                }
+                return typeof child === 'object' ? child : createTextElement(child)
+            })
         }
     }
 }
@@ -138,7 +147,7 @@ function updateHostComponent (fiber) {
     if (!fiber.dom) {
         fiber.dom = createDom(fiber)
     }
-    reconcileChildren(fiber, [].concat(...fiber.props.children))
+    reconcileChildren(fiber, fiber.props ? [].concat(...fiber.props.children) : [])
 }
 
 // 处理函数
@@ -191,7 +200,7 @@ function performUnitOfWork (fiber) {
     let nextFiber = fiber
     while (nextFiber) {
         if (nextFiber.sibling) {
-        return nextFiber.sibling
+            return nextFiber.sibling
         }
         nextFiber = nextFiber.parent
     }
@@ -202,7 +211,7 @@ function createDom (fiber) {
         ? document.createTextNode('')
         : document.createElement(fiber.type)
 
-    updateDom(dom, {}, fiber.props)
+    updateDom(dom, {}, fiber.props || {})
 
     return dom
 }
