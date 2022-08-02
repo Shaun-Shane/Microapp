@@ -1,27 +1,26 @@
 import babelTransformSync from './transform.js'
 import fs from 'fs'
 import liveServer from 'live-server'
-import { insertScriptToHtml, loadPage, changeMethods } from './utils.js'
+import { insertScriptToHtml, loadPage, modifyCode } from './utils.js'
 
 try {
     // 编译 pages 中的 jsx
     const jsx = fs.readFileSync('pages/index.jsx', 'utf8')
     console.log('transforming...')
     const trans = babelTransformSync(jsx)
-    fs.writeFileSync('framework/dist/pages/index.js', changeMethods(trans.code))
+    fs.writeFileSync('framework/dist/pages/index.js', modifyCode(trans.code))
     console.log('success!')
 
     // insert <script> into html
     insertScriptToHtml()
 
-
     // load pages/index
     loadPage('index')
 
     // start app
-    // liveServer.start({
-    //     root: 'framework'
-    // })
+    liveServer.start({
+        root: 'framework'
+    })
 } catch (err) {
     console.log(err)
 }

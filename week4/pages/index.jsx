@@ -62,9 +62,10 @@ class List extends Component {
 export default class Index extends Component {
     methods    = {
         calc1 () {
-            let tmp = 1
-            for (let i = 0; i < 1000; i++) ++tmp
-            alert(tmp)
+            console.log('calc1 running...')
+            let tmp = 1;
+            for (let i = 0; i < 10000000000; i++) ++tmp;
+            console.log(tmp);
         },
         calc2 (tmp, tmp2) {
             for (let i = 0; i < 1000; i++) ++tmp
@@ -86,8 +87,8 @@ export default class Index extends Component {
                 <p r-for={(item, index) in arr} key={index}>
                     {item}
                 </p>
-                <p r-if={true}> v-if-true: {this.methods.calc2(3, 101)} </p>
-                <p r-if={false}> v-if-false: {this.methods.calc2(3, 101)}</p>
+                <p r-if={true}> v-if-true: {123/*this.methods.calc2(3, 101)*/} </p>
+                <p r-if={false}> v-if-false: {123/*this.methods.calc2(3, 101)*/}</p>
             </div>
         )
     }

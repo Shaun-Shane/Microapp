@@ -4,7 +4,8 @@ const worker = new Worker('worker.js')
 export function invoke (func = '', params = []) {
     const promise = new Promise((resolve, reject)=> {
       worker.onmessage = (e) => {
-        resolve(JSON.parse(e.data))
+        if (!e.data) resolve(e.data)
+        else resolve(JSON.parse(e.data))
       }
       worker.onerror = (e) => {
         reject(e)
