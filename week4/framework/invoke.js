@@ -1,5 +1,12 @@
 const worker = new Worker('worker.js')
 
+export function addFn (func = '') {
+  worker.postMessage({
+    type: 'addFn',
+    func: func
+  })
+}
+
 // webworker 进行计算相关函数调用 返回 promise
 export function invoke (func = '', params = []) {
     const promise = new Promise((resolve, reject) => {
@@ -16,6 +23,7 @@ export function invoke (func = '', params = []) {
       }
     })
     worker.postMessage({
+        type: 'invoke',
         func: func,
         params: params
     })

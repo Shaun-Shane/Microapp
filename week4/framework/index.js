@@ -1,7 +1,8 @@
 import babelTransformSync from './transform.js'
 import fs from 'fs'
 import liveServer from 'live-server'
-import { insertScriptToHtml, loadPage, modifyCode } from './utils.js'
+import { load, modifyCode } from './utils.js'
+
 
 try {
     // 编译 pages 中的 jsx
@@ -10,12 +11,12 @@ try {
     const trans = babelTransformSync(jsx)
     fs.writeFileSync('framework/dist/pages/index.js', modifyCode(trans.code))
     console.log('success!')
+    // 复制 css
+    const css = fs.readFileSync('pages/index.css', 'utf-8')
+    fs.writeFileSync('framework/dist/pages/index.css', css)
 
-    // insert <script> into html
-    insertScriptToHtml()
-
-    // load pages/index
-    loadPage('index')
+    // 加载指定页面
+    load('index')
 
     // start app
     liveServer.start({

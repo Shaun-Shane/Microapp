@@ -14,6 +14,14 @@ function getParameterName (fnStr) {
     return result === null ? [] : result;
 }
 
+// 获取函数名
+function getFnName (fnStr) {
+    fnStr = fnStr.substr(0, fnStr.indexOf('('))
+    let index = fnStr.length - 1
+    while (index >= 0 && fnStr[index] !== ' ' && fnStr[index] !== '/') --index
+    return fnStr.substr(index + 1)
+}
+
 // 生成页面 page 的 js 代码
 function pageCode (page) {
     page = page.split('.')[0]
@@ -25,32 +33,38 @@ function pageCode (page) {
 }
 
 // 将 script 标签插入 html
-export function insertScriptToHtml () {
+function insertScriptCssToHtml (page) {
     const html = fs.readFileSync('index.html', 'utf-8')
     const pos = html.indexOf('</body>') + 7
-    const resultHtml = html.substr(0, pos)
+    let resultHtml = html.substr(0, pos)
                     + '\n  <script type="module" src="./dist/master.js"></script>'
                     + html.substr(pos)
+
+    const posCss = html.indexOf('</head>')
+    resultHtml = resultHtml.substr(0, posCss)
+                + `\n  <link href="./dist/pages/${page}.css" rel="stylesheet">`
+                + resultHtml.substr(posCss)
     fs.writeFileSync('framework/index.html', resultHtml)
 }
 
 // import page 对应的 js 到 master.js 中
-export function loadPage (page) { // page can be index page1 page2...
+function loadPage (page) { // page can be index page1 page2...
     // load js
     fs.writeFileSync('framework/dist/master.js', pageCode(`${page.toLowerCase()}.js`))
     console.log('load success!')
 }
 
 // 替换 methods 相关代码
-// calc2(tmp, tmp2) { return await invoke(calc2.toString(), [tmp, tmp2]) }
+// 例如 calc2(tmp, tmp2) { return await invoke('calc2', [tmp, tmp2]) }
 function replaceMethodsStr(code, range) {
     let str = code.substr(range.start, range.end - range.start + 1)
     const prevLength = str.length
+    const fnName = getFnName(str)
+    code = code + `\n addFn(\`${str}\`)`
 
-
-    const name = '\nasync' + str.substr(0, str.indexOf('{'))
+    const name = '\nasync ' + str.substr(0, str.indexOf('{'))
     const params = getParameterName(str)
-    const body = `{ return await invoke(\`${str}\`, [${params.map(e => e).join(', ')}]) }`
+    const body = `{ return await invoke(\`${fnName}\`, [${params.map(e => e).join(', ')}]) }`
 
     const AsyncFunc = Object.getPrototypeOf(async function() {}).constructor
     let newStr = (new AsyncFunc(...[].concat(params), body)).toString()
@@ -68,7 +82,6 @@ function replaceMethodsStr(code, range) {
 function changeStr (code, index) {
     let bracketCount = 0
     let funcStart = -1, funcEnd = -1
-    let totalDelta = 0
     while (index < code.length) {
         const prevCount = bracketCount
         if (code[index] === '{') bracketCount++
@@ -90,7 +103,6 @@ function changeStr (code, index) {
                     funcEnd = index
                     const update = replaceMethodsStr(code, { start: funcStart, end: funcEnd})
                     code = update.code
-                    totalDelta += update.delta
                     index += update.delta
                     funcStart = funcEnd = -1
                 }
@@ -98,10 +110,7 @@ function changeStr (code, index) {
         }
         ++index
     }
-    return {
-        code: code,
-        delta: totalDelta
-    }
+    return code
 }
 
 // 对代码中的 methods 部分进行修改
@@ -109,19 +118,24 @@ function changeMethods (code) {
     const str = 'methods = '
     let index = code.indexOf(str)
     while (index !== -1) {
-        const update = changeStr(code, index + str.length)
-        code = update.code
-        index += update.delta
+        code = changeStr(code, index + str.length)
         index = code.indexOf(str, index + 1)
     }
     return code
 }
 
 function insertInvoke (code) {
-    return 'import { invoke } from \'../../invoke.js\'\n' + code
+    return 'import { addFn, invoke } from \'../../invoke.js\'\n' + code
 }
 
 export function modifyCode (code) {
     code = insertInvoke(code)
     return changeMethods(code)
+}
+
+export function load (page) {
+    // insert <script> into html
+    insertScriptCssToHtml(page)
+    // load pages/index
+    loadPage(page)
 }

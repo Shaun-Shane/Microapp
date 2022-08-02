@@ -12,6 +12,15 @@ function getParameterName (fnStr) {
     return result === null ? [] : result;
 }
 
+// 获取函数名
+function getFnName (fnStr) {
+    fnStr = fnStr.substr(0, fnStr.indexOf('('))
+    let index = fnStr.length - 1
+    while (index >= 0 && fnStr[index] !== ' ' && fnStr[index] !== '/') --index
+    return fnStr.substr(index + 1)
+}
+
+// 将 alert 转换为 postMessage
 function transformAlert (body) {
     let start = body.indexOf('alert'), end = -1, count = 0
     if (start === -1) return body
@@ -31,7 +40,24 @@ function transformAlert (body) {
     return body
 }
 
+let functions = {}
+function addFn(func) {
+    const body = transformAlert(func.substr(func.indexOf('{')))
+    const funcName = getFnName(func)
+    const newFunc = new Function(...[].concat(getParameterName(func)), body)
+    functions[funcName] = newFunc
+}
+
 self.onmessage = (e) => {
+    if (e.data.type) {
+        if (e.data.type === 'addFn') addFn(e.data.func)
+        else if (e.data.type === 'invoke') {
+            const func = e.data.func
+            const params = e.data.params
+            postMessage(functions[func](...[].concat(params)))
+        }
+        return
+    }
     const tmp = e.data.func
     const params = e.data.params
     const body = transformAlert(tmp.substr(tmp.indexOf('{')))

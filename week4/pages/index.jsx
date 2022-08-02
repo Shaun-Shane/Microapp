@@ -78,7 +78,7 @@ export default class Index extends Component {
 
     render () {
         return (
-            <div className="profile">
+            <div className="myclass">
                 <span className="profile-title" onClick={this.methods.calc1}>这是一个 span, 点击进行 10000000000 次循环</span>
                 <h3 className="profile-content">这是一个 h3</h3>
                 this is ...
