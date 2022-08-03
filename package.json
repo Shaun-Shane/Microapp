@@ -1,0 +1,20 @@
+{
+  "name": "week4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node framework/index.js",
+    "startparcel": "parcel test/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-react": "^7.18.6",
+    "babel-core": "^7.0.0-bridge.0",
+    "live-server": "^1.2.2",
+    "parcel-bundler": "^1.12.5"
+  }
+}
