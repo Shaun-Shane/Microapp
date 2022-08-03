@@ -79,7 +79,7 @@
 <br/>
 
 - 双线程通信
-    为了避免 CPU 密集型运算阻塞渲染，在小程序启动时将用户的部分函数转为 string，并通过 ``addFunc`` 添加到 WebWorker。此后渲染线程通过 ``invoke`` 函数向 WebWorker 发送计算请求，由 WebWorker 计算后通过 ``postMessage`` 返回结果。
+    为了避免 CPU 密集任务阻塞渲染，在小程序启动时将用户的部分函数转为 string，并通过 ``addFunc`` 添加到 WebWorker。此后渲染线程通过 ``invoke`` 函数向 WebWorker 发送计算请求，由 WebWorker 计算后通过 ``postMessage`` 返回结果。
     具体实现见 ``framework/invoke.js`` 和 ``framework/worker.js``。
     此外 ``framwwork/utils.js``中的 ``modifyCode`` 函数会对编译后的 js 文件进行再修改，将用户函数转化为 ``await invoke`` 形式。
 <br/>
@@ -92,7 +92,7 @@
 
 ### 结果演示
   - 成功进行了渲染和界面更新。
-  - 当点击 span 进行 cpu 密集型运算后，并未阻塞渲染。
+  - 当点击 span 执行 cpu 密集型任务后，并未阻塞渲染。
   - 逻辑线程结果产生后，成功返回结果。最后由渲染层通过 alert 显示结果。
 
 <center class="half">
